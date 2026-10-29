@@ -8,8 +8,13 @@ class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
 
+class VehicleInline(admin.StackedInline):
+    model = Vehicle
+    max_num = 1
+    can_delete = False
+
 class CustomUserAdmin(UserAdmin):
-    inlines = (ProfileInline, )
+    inlines = (ProfileInline, VehicleInline, )
 
 
 admin.site.unregister(User)
