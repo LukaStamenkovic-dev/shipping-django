@@ -1,5 +1,5 @@
 <h1>Test123</h1>
 
 {% for log in user.vehiclelog_set.all %}
-    <p>{{log.return_time}}: {{ log.vehicle.plate_number }} - {{log.mileage}}</p>
+    <p>{{log.return_time}}: {{ log.vehicle.plate_number }} - {{log.mileage}}km (&euro;{{log.earning}})</p>
 {% endfor %}

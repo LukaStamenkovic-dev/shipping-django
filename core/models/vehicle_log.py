@@ -19,3 +19,6 @@ class VehicleLog(models.Model):
 
     def __str__(self):
         return self.vehicle.plate_number if self.vehicle else str(self.id)
+
+    def earning(self):
+        return self.mileage * self.user.profile.rate
