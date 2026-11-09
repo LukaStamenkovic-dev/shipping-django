@@ -20,5 +20,5 @@ from core.views import ProfileView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('profile/', ProfileView.as_view()),
+    path('profile/', ProfileView.as_view(), name='profile'),
 ]
