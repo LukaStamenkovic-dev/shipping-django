@@ -4,6 +4,7 @@ from django.utils import timezone
 
 from ..forms import VehicleLogForm
 from ..models import Profile, VehicleLog
+from ..services import VehicleLogService
 
 class ProfileView(DetailView):
     model = Profile
@@ -16,29 +17,23 @@ class ProfileView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        today = timezone.localdate()
+        state = VehicleLogService.get_state(self.request.user)
 
-        already_logged = VehicleLog.objects.filter(
-            user = self.request.user,
-            return_time__date=today
-        )
+        if state['vehicle'] is None:
+            context['has_vehicle'] = False
+            return context
 
-        context['already_logged'] = already_logged
+        context['already_logged'] = state['already_logged']
 
-        if not already_logged:
+        if not state['already_logged']:
             context['form'] = VehicleLogForm()
 
         return context
 
     def post(self, request, *args, **kwargs):
-        today = timezone.localdate()
+        state = VehicleLogService.get_state(self.request.user)
 
-        already_logged = VehicleLog.objects.filter(
-            user = self.request.user,
-            return_time__date=today
-        )
-
-        if not already_logged:
+        if state['vehicle'] is None or state['already_logged']:
             return redirect('profile')
 
         form = VehicleLogForm(request.POST)
